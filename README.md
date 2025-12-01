@@ -1,5 +1,5 @@
 # rcn_Alber_MATLAB
-Solver for the Alber equation. Full paper at [arXiv:2506.06879]([https://arxiv.org/abs/2506.06879]) 
+Solver for the Alber equation. Full paper at [arXiv:2506.06879](https://arxiv.org/abs/2506.06879) 
 
 The paper presents the numerical scheme, explains the exact solution used, defines the constraint error and frames the time order, space order and Monte Carlo series of runs. Please note that the scripts here in their current form do not exactlty match the runs in the paper (but they can be easily modified to do so).
 
