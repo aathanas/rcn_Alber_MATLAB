@@ -1,6 +1,8 @@
 # rcn_Alber_MATLAB
 Solver for the Alber equation. Full paper at arXiv:2506.06879
 
+The paper presents the numerical scheme, explains the exact solution used, defines the constraint error and frames the time order, space order and Monte Carlo series of runs. Please note that the scripts here in their current form do not exactlty match the runs in the paper (but they can be easily modified to do so).
+
 To run, call any of the "main" m-files:
 * `main_basic` executes a single run. By default compares to an exact solution; other initial conditions can be selected.
 * `main_time_order` executes a series of runs, comparing to an exact solution, to find the experimental order of convergence (EOC) in time (expected to be 2).
