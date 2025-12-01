@@ -6,8 +6,7 @@ init;
 % load paths, cleanup empty output folders, run basic system diagnostics
 % generates a timestamped job id
 
-cfg = SetupCfg(job_tag)
-clear job_tag
+cfg = SetupCfg
 % cfg --> configuration
 % creates a global config, with flags and preferences for what quantities 
 % to compute, plot and save.
@@ -30,7 +29,7 @@ dt=0.02
 dx=0.155
 % tweaking the discretization that will be used in this run
 
-T=0.4 * CP.Timescale % intended final time for the simulation
+T=0.05 * CP.Timescale % intended final time for the simulation
 
 
 
