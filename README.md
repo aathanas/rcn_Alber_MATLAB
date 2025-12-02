@@ -17,7 +17,7 @@ To modify initial conditions see `SetupProblem` in the problem_specific folder.
 
 Most of these main scripts are setup by default with short final times `T`, to enable quick benchmarking. 
 
-Comemnts and diagnostics are printed in the command window and recorded in a log file in outputs. Plots may be saved in outputs (in a different folder for each job) according to the options specifid in `cfg` (see below).
+Comemnts and diagnostics are printed in the command window and recorded in a log file in outputs. Plots may be saved in the outputs folder (in a different subfolder for each job) according to the options specifid in `cfg` (see below).
 
 Throughout the code, the variables are organized in a number of structs:
 * `cfg` (configuration) has all the flags of what kinds of diagnostics to compute, print, plot and save; whether figures are visible or not etc. 
