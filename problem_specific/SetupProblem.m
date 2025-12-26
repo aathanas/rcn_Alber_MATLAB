@@ -15,7 +15,7 @@ if cfg.compare2exact
 
     CP = LoadExactSolution;
 
-elseif cfg.MC_AF_run
+elseif isprop(cfg, 'MC_AF_run')
 
     CP.p = 1;
     CP.q = 1;
