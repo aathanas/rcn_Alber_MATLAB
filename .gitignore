@@ -3,4 +3,5 @@
 *.log
 *.pdf
 *.png
+.DS_Store
 /outputs/
