@@ -19,7 +19,7 @@ end
 
 
 
-cfg.slurm_flag = 0; % options are 1, 0. 
+cfg.slurm_flag = 1; % options are 1, 0. 
 % If 1, it is assumed that the code is running in a non-interactive way 
 % and opens no windows. This is safe for HPC clusters. Any plots are 
 % saved directly in the outputs. If it is 0, plots open in figures, and 
