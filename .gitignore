@@ -1,4 +1,6 @@
 *.mat
 *.fig
 *.log
-/temp/
+*.pdf
+*.png
+/outputs/
