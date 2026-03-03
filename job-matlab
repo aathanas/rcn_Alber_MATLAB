@@ -5,5 +5,5 @@
 #SBATCH -t 700:00:00
 #SBATCH -p small-long
 
-/software/MATLAB/R2025a/bin/matlab -nodisplay -nodesktop -nosplash < main_MC_AF.m > testA.out
+/software/MATLAB/R2025b/bin/matlab -nodisplay -nodesktop -nosplash < main_MC_AF.m > testA.out
 
