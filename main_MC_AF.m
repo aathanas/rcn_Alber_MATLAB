@@ -35,13 +35,13 @@ cfg.keep_track_frequency = 0; % every how many timesteps should we record the qu
 cfg.plot_final_posden = 0;
 
 
-T=0.04;
+T=16;
 
 dt=0.002
-dx=0.09
+dx=0.12
 
 
-N_mc = 3;
+N_mc = 20;
 
 
 % Series Diagnostics
