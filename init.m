@@ -20,8 +20,8 @@ addpath('outputs')
 diary outputs/everything.log
 
 
-% delete any empty output subfolders leftover from previous times
-FolderCleanup('outputs/')
+% % delete any empty output subfolders leftover from previous times
+% FolderCleanup('outputs/')
 
 
 
