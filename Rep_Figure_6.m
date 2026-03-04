@@ -19,7 +19,8 @@ cfg.init_type = 'advanced';
 
 cfg.compare2exact = 0;
 
-cfg.MC_AF_run = 1; % this will create random IC
+cfg.MC_AF_run = 0; % this will create random IC
+cfg.Fig6 = 1;
 
 cfg.do_invariants = 1; % options are 0, 1. Controls whether to compute invariants of the continuous problem at initial and final time
                        % no good reason to turn it off...

@@ -1,8 +1,8 @@
 function CP = SetupProblem(cfg)
-% create a CP (=continuous problem) struct with parameters for 
+% create a CP (=continuous problem) struct with parameters for
 % the continuous problem
 % \[
-% 		i \partial_t u + p (\Delta_x - \Delta_y) u + q ( u(x,x,t)-u(y,y,t) ) ( \Gamma(x-y)  + u(x,y,t) )=0,  
+% 		i \partial_t u + p (\Delta_x - \Delta_y) u + q ( u(x,x,t)-u(y,y,t) ) ( \Gamma(x-y)  + u(x,y,t) )=0,
 %            (x,y) \in [-L/2,L/2]^2,
 %            u(x,y,0) = u0(x,y)
 % \]
@@ -55,6 +55,55 @@ elseif cfg.MC_AF_run
     % has O(1) scales and L^p norm. It is Hermitian by default, to be consistent with
     % the physical context.
 
+elseif cfg.Fig6 % you can put your favorite continuous problem here
+
+    CP.p = 1;
+    CP.q = 1;
+
+    sigma=0.36;
+    C= 1.9;
+    CP.SpectrumIntensity = C;
+
+
+    CP.Gamma = @(x) C^2  * exp(-pi*sigma^2*x.^2); % must be an autocorrelation,
+    % i.e., the Fourier transform of a non-negative function
+
+    L=50;
+    CP.Limits = [-L/2 L/2]; % limits of the computational domain in the
+    % format [xmin xmax]. The ymin=xmin and xmax=xmin by the symmetry of
+    % the problem.
+
+    CP.problemname = 'inhomogeneity over strongly unstable Gaussian background'; % a string to describe this solution
+
+    CP.dx0 = 1e-2; % recommended baseline space discretization (order of magnitude)
+    CP.dt0 = 1e-3; % recommended baseline time discretization (order of magnitude)
+    % both these values are taken to characterise the continuous problem,
+    % i.e. what kind of meshes does this problem require in principle
+
+
+
+
+
+    CP.Timescale = 20; % an O(1) meaningful timescale for this problem
+
+    CP.maxtime = inf; % a timescale beyond which it makes no sense to go
+    % e.g. exact solution breaks down etc
+
+
+
+    z = [0.3 + 0.8*1i; -0.2; 0.1*1i];
+
+
+    v0 = @(x,y) 0.05 .* exp(-0.06 .* x.^2 - 0.07 .* y.^2) .* ...
+        (1 + z(1) .* cos(0.3 .* x) .* cos(0.2 .* y) ...
+        + z(2) .* x + z(3) .* y);
+
+
+    u0 = @(x,y)  0.5 * ( v0(x,y) + conj( v0(y,x) ) ) ;
+
+    CP.IC = @(x,y) u0(x,y);
+
+
 else % you can put your favorite continuous problem here
 
     CP.p = 1;
@@ -92,7 +141,6 @@ else % you can put your favorite continuous problem here
 
     v0 = @(x,y) exp(-0.1 *x.^2 -0.2*y.^2).*(1+x.^2+cos(y));
     CP.IC = @(x,y) 0.095 * ( v0(x,y) + conj( v0(y,x) ) );
-
 
 end
 
