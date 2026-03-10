@@ -20,7 +20,7 @@ cfg.init_type = 'advanced';
 cfg.compare2exact = 0;
 
 cfg.MC_AF_run = 0; % this will create random IC
-cfg.Fig6 = 1;
+cfg.Fig7 = 1;
 
 cfg.do_invariants = 1; % options are 0, 1. Controls whether to compute invariants of the continuous problem at initial and final time
                        % no good reason to turn it off...
@@ -56,7 +56,6 @@ CP = SetupProblem(cfg)
 % computational domain, including the (continuous) initial condition 
 % See detailed comments in SetupProblem for the fields of Parameters
 
-CP.SpectrumIntensity = 1.9
 
 
 

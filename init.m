@@ -1,5 +1,17 @@
 function init
 
+
+
+try
+    system("mkdir -p outputs");
+catch ME
+end
+
+
+rng('shuffle');
+
+
+
 %% set up paths, logging, and system diagnostics
 
 % to get clean looking logs
@@ -7,6 +19,8 @@ try
     feature('HotLinks', 'off');
 catch ME
 end
+
+
 
 
 % add paths and turn on logging

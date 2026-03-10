@@ -41,7 +41,7 @@ dt=0.002
 dx=0.12
 
 
-N_mc = 20;
+N_mc = 120;
 
 
 % Series Diagnostics

@@ -88,7 +88,7 @@ cfg.L = 24;
 
 cfg.randomflag = 1; % use random coefficients in the initialization of the inhomogeneity
 
-cfg.Fig6 = 0;
+cfg.Fig7 = 0;
 cfg.Fig9 = 0;
 
 end

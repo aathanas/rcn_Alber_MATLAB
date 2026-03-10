@@ -55,7 +55,7 @@ elseif cfg.MC_AF_run
     % has O(1) scales and L^p norm. It is Hermitian by default, to be consistent with
     % the physical context.
 
-elseif cfg.Fig6 % you can put your favorite continuous problem here
+elseif cfg.Fig7 % you can put your favorite continuous problem here
 
     CP.p = 1;
     CP.q = 1;
