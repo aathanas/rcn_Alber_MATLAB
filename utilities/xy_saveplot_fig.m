@@ -4,8 +4,8 @@ function xy_saveplot_fig(x,y,f,this_title,fig_tag,cfg,x_lab,y_lab)
 
 f1 = LaunchFigure(cfg);
 
-png_filename = ['outputs/' cfg.job_tag '/' fig_tag '.png'];
-fig_filename = ['outputs/' cfg.job_tag '/' fig_tag '.fig'];
+png_filename = fullfile( [cfg.outpath '/' fig_tag '.png'] );
+fig_filename = fullfile( [cfg.outpath '/' fig_tag '.fig'] );
 
 pcolor(x,y,f);
 shading interp

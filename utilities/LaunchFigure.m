@@ -8,7 +8,7 @@ else
     f1 = figure;
 end
 
-set(gcf,'Theme','light')
+%set(gcf,'Theme','light')
 set(gcf,'Units','normalized','Position',[0.1 0.1 0.6 0.6])
 
 

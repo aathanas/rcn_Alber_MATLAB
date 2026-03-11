@@ -6,8 +6,8 @@ function f_of_x_save_fig(xcell,fcell,this_titlecell,fig_tag,cfg,x_lab)
 
 f1 = LaunchFigure(cfg);
 
-pdf_filename = ['outputs/' cfg.job_tag '/' fig_tag '.pdf'];
-fig_filename = ['outputs/' cfg.job_tag '/' fig_tag '.fig'];
+pdf_filename = fullfile( [cfg.outpath '/' fig_tag '.pdf'] );
+fig_filename = fullfile( [cfg.outpath '/' fig_tag '.fig'] );
 
 set(gcf,'position',[0.1 0.4 0.8 0.6])
 

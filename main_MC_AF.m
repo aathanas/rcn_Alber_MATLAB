@@ -35,13 +35,13 @@ cfg.keep_track_frequency = 0; % every how many timesteps should we record the qu
 cfg.plot_final_posden = 0;
 
 
-T=16;
+T= 16
 
 dt=0.002
 dx=0.12
 
 
-N_mc = 120;
+N_mc =  20
 
 
 % Series Diagnostics
@@ -56,8 +56,8 @@ SeriesD.dI2 = [];
 SeriesD.dI3 = [];
 
 
-filename = "outputs/" + cfg.job_tag  + "/SeriesD_" + ...
-           string(datetime('now','Format','yyyy-MM-dd_HH-mm-ss'));
+filename = fullfile( cfg.outpath  + "/SeriesD_" + ...
+           string(datetime('now','Format','yyyy-MM-dd_HH-mm-ss')) );
 
 
 
@@ -107,8 +107,8 @@ set(gca, 'XMinorTick', 'on', 'YMinorTick', 'on');
 
 
 fig_tag = '4_amp_fact';
-pdf_filename = ['outputs/' cfg.job_tag '/' fig_tag '.pdf'];
-fig_filename = ['outputs/' cfg.job_tag '/' fig_tag '.fig'];
+pdf_filename = fullfile( [cfg.outpath '/' fig_tag '.pdf'] );
+fig_filename = fullfile( [cfg.outpath '/' fig_tag '.fig'] );
 
 
 exportgraphics(f1,pdf_filename,'ContentType','vector');

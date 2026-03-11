@@ -1,13 +1,13 @@
 function init
 
 
-
+% create the local outputs folder if it doesn't exist
 try
-    system("mkdir -p outputs");
+    system("mkdir -p outputs"); 
 catch ME
 end
 
-
+% shuffle the rng seed with the clock
 rng('shuffle');
 
 
@@ -31,11 +31,13 @@ addpath('problem_specific')
 addpath('tests')
 addpath('outputs')
 
-diary outputs/everything.log
+% this would create one global log for all runs. In HPC it's unreadable
+% hence it was moved in SetupCfg, in the outpath for each job
+% diary outputs/everything.log
 
 
-% % delete any empty output subfolders leftover from previous times
-% FolderCleanup('outputs/')
+% delete any empty output subfolders leftover from previous times
+FolderCleanup('outputs/')
 
 
 
@@ -49,28 +51,6 @@ end
 
 
 
-% timestamp of starting up the job
-disp(['[init] ' char(datetime('now')) ]);
-
-
-% print out the name of the computer we are working on for the log
-try
-    hostname = getHostname;
-    if ~isempty(hostname)
-        disp(['[init] Working on ' getHostname ]);
-    end
-catch ME
-    disp('[init] Couldn''t get hostname...');
-end
-
-
-% print out cores info
-disp('[init] Processors info: ')
-feature('numCores');
-
-% print out blas info (relates to multi-thread execution of linear algebra)
-blas_info = version('-blas');
-disp(['[init] BLAS version: '  blas_info ]) 
 
 
 

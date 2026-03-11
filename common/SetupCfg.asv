@@ -39,19 +39,15 @@ catch ME
 end
 
 
-% if desired, number of cores can be limited here
-% maxNumCompThreads(8);
-
-
 % print out cores info
 disp('[SetupCfg] Processors info: ')
 feature('numCores');
 
-
+ma
 
 % print out blas info (relates to multi-thread execution of linear algebra)
 blas_info = version('-blas');
-disp(['[SetupCfg] BLAS version: '  blas_info ]) 
+disp(['[init] BLAS version: '  blas_info ]) 
 
 
 %%
