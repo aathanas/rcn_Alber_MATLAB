@@ -3,5 +3,6 @@
 *.log
 *.pdf
 *.png
+*.asv
 .DS_Store
 /outputs/
