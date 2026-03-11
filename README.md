@@ -12,7 +12,7 @@ To run, call any of the "main" m-files listed below. The scripts will run with d
 * `main_time_order` executes a series of runs, comparing to an exact solution, to find the experimental order of convergence (EOC) in time (expected to be 2).
 * `main_space_order` executes a series of runs, comparing to an exact solution, to find the EOC in space (expected to be 4).
 * `main_MC_AF` executes a Monte Carlo (MC) series of runs, investigating the total amplification factor (AF) for randomized initial conditions and intensity of a background Gaussian spectrum.
-* m-files with names starting `Rep_*` reproduce figures from the paper
+* m-files with names starting `Rep_*` reproduce results from the paper.
 
 To modify initial conditions see `SetupProblem` in the problem_specific folder.
 
