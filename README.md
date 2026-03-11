@@ -17,7 +17,7 @@ To modify initial conditions see `SetupProblem` in the problem_specific folder.
 
 Most of these main scripts are setup by default with short final times `T`, to enable quick benchmarking. 
 
-Comemnts and diagnostics are printed in the command window and recorded in a log file in outputs. Plots may be saved in the outputs folder (in a different subfolder for each job) according to the options specifid in `cfg` (see below).
+Comments and diagnostics are printed in the command window and recorded in a log file in outputs (in a different subfolder for each job). Plots may be saved in the outputs folder according to the options specifid in `cfg` (see below).
 
 Throughout the code, the variables are organized in a number of structs:
 * `cfg` (configuration) has all the flags of what kinds of diagnostics to compute, print, plot and save; whether figures are visible or not etc. 
@@ -25,6 +25,6 @@ Throughout the code, the variables are organized in a number of structs:
 * `SD` (Spatial Discretization) holds the matrices and meshes used in the simualtion. It is created based on an intended dx, but the exact dx may be different (as the length of the computational domain is preset in CP).
 * `state` is a struct containing the current state of the solver. Typically there are two states, `state_new` and `state_old` (out of which `state_new` is computed during each timestep). `state_new` contains discrete U^n, discrete Phi^{n-1/2}, discrete times t^n, t^{n-1/2}.
 
-Please note that links on the command prompt are deactivated for logging purposes. You can turn them back on with the command `feature('HotLinks', 'n');`.
+Please note that links on the command prompt are deactivated for logging purposes. You can turn them back on with the command `feature('HotLinks', 1);`.
 
-The code was prepared and runs on R2023b. 
+The code was prepared and runs on R2023b, R2025b. 
