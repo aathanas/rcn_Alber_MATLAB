@@ -2,6 +2,7 @@ clc; close all; clear all
 
 %% set up job manually
 
+cd ..
 init;
 % load paths, cleanup empty output folders, run basic system diagnostics
 % generates a timestamped job id
@@ -9,7 +10,7 @@ init;
 
 cfg = SetupCfg;
 % cfg --> configuration
-% creates a global config, with flags and preferences for what quantities 
+% creates a global config, with flags and preferences for what quantities
 % to compute, plot and save.
 % See detailed comments in init for the fields of cfg
 
@@ -19,7 +20,7 @@ cfg.init_type = 'advanced';
 % explicit control of initialization type
 
 cfg.compare2exact = 1;
-cfg.keep_track_frequency = 1; % every how many timesteps should we record the quantities we keep track of. 
+cfg.keep_track_frequency = 1; % every how many timesteps should we record the quantities we keep track of.
 % make sure we are comparing to exact solution for validation
 
 
@@ -31,7 +32,7 @@ cfg
 CP = SetupProblem(cfg)
 % CP --> Continuous Problem
 % contains the parameters that define the continuous problem on a finite
-% computational domain, including the (continuous) initial condition 
+% computational domain, including the (continuous) initial condition
 % See detailed comments in SetupProblem for the fields of Parameters
 
 
@@ -58,11 +59,9 @@ SeriesD.LinfPhi = []; % Linf error for Phi in each run
 
 for jj=1:K
 
-    
+
 
     % tweaking the discretization that will be used in this run
-
-    
 
 
 
@@ -79,7 +78,7 @@ for jj=1:K
     SeriesD.L2Phi = [SeriesD.L2Phi max(CGD.L2_err_Phi)]; % L2 error for Phi in each run
     SeriesD.LinfPhi = [SeriesD.LinfPhi max(CGD.Linf_err_Phi)]; % Linf error for Phi in each run
 
-    
+
     dx = dx / 2^0.25;
 
 end
