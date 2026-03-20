@@ -6,3 +6,4 @@
 *.asv
 .DS_Store
 /outputs/
+/tmp/

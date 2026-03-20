@@ -16,7 +16,7 @@ rng('shuffle');
 % to get clean looking logs
 try
     feature('HotLinks', 'off');
-catch ME
+catch
 end
 
 
@@ -27,7 +27,6 @@ addpath('spatial_discretization')
 addpath('common')
 addpath('utilities')
 addpath('problem_specific')
-addpath('tests')
 addpath('outputs')
 
 % this would create one global log for all runs. In HPC it's unreadable
