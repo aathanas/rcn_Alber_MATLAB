@@ -14,7 +14,7 @@ Call any of the `main_*` scripts from the project root. They run with default pa
 
 To modify initial conditions, edit `SetupProblem` in the `problem_specific/` folder.
 
-Comments and diagnostics are printed to the command window and recorded in a log file. Each run creates a timestamped subfolder under `outputs/`. Plots are saved there according to the flags in `cfg`.
+Each run creates a timestamped subfolder under `outputs/`. Plots are saved there according to the flags in `cfg`. Comments and diagnostics are printed to the command window and recorded in a log file in the timestamped subfolder.
 
 ## Code structure
 Throughout the code, variables are organized in structs:
