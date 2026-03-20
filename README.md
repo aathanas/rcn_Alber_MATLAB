@@ -1,31 +1,42 @@
 # rcn_Alber_MATLAB
-Solver for the Alber equation, implemented in MATLAB. Full paper at [arXiv:2506.06879](https://arxiv.org/abs/2506.06879) 
+Solver for the Alber equation, implemented in MATLAB. Full paper at [arXiv:2506.06879](https://arxiv.org/abs/2506.06879)
 
-The paper presents the numerical scheme, explains the exact solution used, defines the constraint error and frames the time order, space order and Monte Carlo series of runs. Please note that the scripts here in their current form do not exactlty match the runs in the paper (but they can be easily modified to do so).
+## Setup
+Clone or download the repository and keep the folder structure intact. Set MATLAB's working directory to the project root before running any script.
 
-HOW TO DEPLOY:
-Save all files (in the current folder structure) in the same folder. 
+## Running the solver
+Call any of the `main_*` scripts from the project root. They run with default parameters and short final times `T` to enable quick benchmarking.
 
-HOW TO RUN:
-To run, call any of the "main" m-files listed below. The scripts will run with default parameters. 
-* `main_basic` executes a single run. By default compares to an exact solution; other initial conditions can be selected.
-* `main_time_order` executes a series of runs, comparing to an exact solution, to find the experimental order of convergence (EOC) in time (expected to be 2).
-* `main_space_order` executes a series of runs, comparing to an exact solution, to find the EOC in space (expected to be 4).
-* `main_MC_AF` executes a Monte Carlo (MC) series of runs, investigating the total amplification factor (AF) for randomized initial conditions and intensity of a background Gaussian spectrum.
-* m-files with names starting `Rep_*` reproduce results from the paper.
+* `main_basic` — a single run, comparing to an exact solution by default; other initial conditions can be selected in `SetupProblem`.
+* `main_time_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in time (expected: 2).
+* `main_space_order` — same as above but refining in space (expected EOC: 4).
+* `main_MC_AF` — a Monte Carlo series of runs investigating the total amplification factor (AF) for randomized initial conditions over a Gaussian background spectrum.
 
-To modify initial conditions see `SetupProblem` in the problem_specific folder.
+To modify initial conditions, edit `SetupProblem` in the `problem_specific/` folder.
 
-Most of these main scripts are setup by default with short final times `T`, to enable quick benchmarking. 
+Comments and diagnostics are printed to the command window and recorded in a log file. Each run creates a timestamped subfolder under `outputs/`. Plots are saved there according to the flags in `cfg`.
 
-Comments and diagnostics are printed in the command window and recorded in a log file in outputs (in a different subfolder for each job). Plots may be saved in the outputs folder according to the options specifid in `cfg` (see below).
+## Code structure
+Throughout the code, variables are organized in structs:
+* `cfg` (configuration) — flags controlling what diagnostics to compute, print, plot and save.
+* `CP` (Continuous Problem) — initial condition, equation parameters, background spectrum, and computational domain, all specified before any discretization. Also carries recommended baseline values for `dx` and `dt`.
+* `SD` (Spatial Discretization) — matrices and meshes for the simulation, built from a target `dx` (exact value may differ as the domain length is fixed in `CP`).
+* `state` — current solver state. Two instances are kept at each timestep (`state_old`, `state_new`), containing discrete `U^n`, `Phi^{n-1/2}`, and the corresponding times.
 
-Throughout the code, the variables are organized in a number of structs:
-* `cfg` (configuration) has all the flags of what kinds of diagnostics to compute, print, plot and save; whether figures are visible or not etc. 
-* `CP` (Continuous Problem) has the initial condition (as a function handle), parameters of the equation, homogeneous background (as a function handle), and computational domain. In other words, all the information that would be required to fully specify the continuous problem (on a finite computational domain) before any discretization takes place. It also supports recommended baseline values for dx, dt to be used with the initial condition in question.
-* `SD` (Spatial Discretization) holds the matrices and meshes used in the simualtion. It is created based on an intended dx, but the exact dx may be different (as the length of the computational domain is preset in CP).
-* `state` is a struct containing the current state of the solver. Typically there are two states, `state_new` and `state_old` (out of which `state_new` is computed during each timestep). `state_new` contains discrete U^n, discrete Phi^{n-1/2}, discrete times t^n, t^{n-1/2}.
+Note: hyperlinks in the command window are disabled for cleaner log files. Re-enable with `feature('HotLinks', 1)`.
 
-Please note that links on the command prompt are deactivated for logging purposes. You can turn them back on with the command `feature('HotLinks', 1);`.
+## Reproducing paper results
+The `reproduce/` folder contains scripts that reproduce specific figures and tables from the paper. They can be run directly from that folder — each script changes directory to the project root automatically before initializing.
 
-The code was prepared and runs on R2023b, R2025b. 
+* `Rep_Figures_1to4` — Figures 1–4 (validation against exact solution).
+* `Rep_Figure_6` — Figure 6 (stable Gaussian background, `C=0.9`).
+* `Rep_Figure_7` — Figure 7 (strongly unstable Gaussian background, `C=1.9`).
+* `Rep_Table_1` — Table 1 (time EOC, advanced initialization).
+* `Rep_Table_2` — Table 2 (space EOC, advanced initialization).
+* `Rep_Table_3` — Table 3 (time EOC, naive initialization).
+* `Rep_Table_4` — Table 4 (space EOC, naive initialization).
+
+Note: the scripts in their current form are calibrated to reproduce the paper results but may not exactly match the runs described in the paper in all parameter details.
+
+## Compatibility
+Tested on MATLAB R2023b and R2025b.
