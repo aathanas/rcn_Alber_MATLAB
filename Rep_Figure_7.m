@@ -63,7 +63,7 @@ dt=0.001
 dx=0.09
 % tweaking the discretization that will be used in this run
 
-T = 10 % intended final time for the simulation
+T = 20 % intended final time for the simulation
 
 
 

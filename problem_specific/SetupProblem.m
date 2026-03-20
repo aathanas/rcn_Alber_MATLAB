@@ -103,7 +103,7 @@ elseif cfg.Fig7 % you can put your favorite continuous problem here
 
     CP.IC = @(x,y) u0(x,y);
 
-elseif cfg.Fig9 % you can put your favorite continuous problem here
+elseif cfg.Fig6 % you can put your favorite continuous problem here
 
     CP.p = 1;
     CP.q = 1;
