@@ -10,9 +10,11 @@ cfg = SetupCfg;
 % cfg --> configuration
 % creates a global config, with flags and preferences for what quantities 
 % to compute, plot and save.
-% See detailed comments in init for the fields of cfg
+% See detailed comments for the fields of cfg
 
-
+cfg.compare2exact = 0;
+% this will disable the comparison to exact solution, and will go the
+% default problem in the end of SetupProblem.m ,below
 
 cfg
 % print out cfg for the log

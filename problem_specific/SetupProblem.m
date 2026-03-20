@@ -151,7 +151,7 @@ elseif strcmp(cfg.reproduce, 'Fig6') % you can put your favorite continuous prob
 
     CP.IC = @(x,y) u0(x,y);
 
-else % you can put your favorite continuous problem here
+else % this is the default problem chosen by main_basic
 
     CP.p = 1;
     CP.q = 1;
