@@ -13,7 +13,7 @@ cfg = SetupCfg
 % See detailed comments in init for the fields of cfg
 
 
-cfg.MC_AF_run = 1;
+cfg.reproduce = 'MC_AF';
 cfg.compare2exact = 0;
 cfg.do_amplific_factor = 1;
 cfg.L = 50;

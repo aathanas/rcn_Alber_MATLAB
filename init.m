@@ -2,9 +2,8 @@ function init
 
 
 % create the local outputs folder if it doesn't exist
-try
-    system("mkdir -p outputs"); 
-catch ME
+if ~exist('outputs', 'dir')
+    mkdir('outputs');
 end
 
 % shuffle the rng seed with the clock

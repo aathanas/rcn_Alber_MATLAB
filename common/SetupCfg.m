@@ -73,8 +73,8 @@ cfg.compare2exact = 1; % options are 0, 1.
 % be loaded. If it is 0, there are preset initial conditions that can be
 % used or modified.
 % ---------------------------------------------------------------------
-cfg.MC_AF_run = 0;
-% If 1, this is a Monte Carlo Amplification Factor run
+cfg.reproduce = 'none';
+% If set to 'Fig6', 'Fig7', or 'MC_AF', selects the corresponding problem preset in SetupProblem
 % ---------------------------------------------------------------------
 
 
@@ -121,13 +121,11 @@ cfg.keep_track_frequency = 0; % every how many timesteps should we record the qu
 % ---------------------------------------------------------------------
 
 
-disp('[init] Set up cfg struct...')
+disp('[SetupCfg] Set up cfg struct...')
 
 cfg.L = 24;
 
 cfg.randomflag = 1; % use random coefficients in the initialization of the inhomogeneity
 
-cfg.Fig7 = 0;
-cfg.Fig6 = 0;
 
 end

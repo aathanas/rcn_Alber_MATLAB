@@ -15,7 +15,7 @@ if cfg.compare2exact
 
     CP = LoadExactSolution;
 
-elseif cfg.MC_AF_run
+elseif strcmp(cfg.reproduce, 'MC_AF')
 
     CP.p = 1;
     CP.q = 1;
@@ -55,7 +55,7 @@ elseif cfg.MC_AF_run
     % has O(1) scales and L^p norm. It is Hermitian by default, to be consistent with
     % the physical context.
 
-elseif cfg.Fig7 % you can put your favorite continuous problem here
+elseif strcmp(cfg.reproduce, 'Fig7') % you can put your favorite continuous problem here
 
     CP.p = 1;
     CP.q = 1;
@@ -103,7 +103,7 @@ elseif cfg.Fig7 % you can put your favorite continuous problem here
 
     CP.IC = @(x,y) u0(x,y);
 
-elseif cfg.Fig6 % you can put your favorite continuous problem here
+elseif strcmp(cfg.reproduce, 'Fig6') % you can put your favorite continuous problem here
 
     CP.p = 1;
     CP.q = 1;
