@@ -7,10 +7,10 @@ Clone or download the repository and keep the folder structure intact. Set MATLA
 ## Running the solver
 Call any of the `main_*` scripts from the project root. They run with default parameters and short final times `T` to enable quick benchmarking.
 
-* `main_basic` — a single run, comparing to an exact solution by default; other initial conditions can be selected in `SetupProblem`.
+* `main_basic` — a single run, set up with a default problem; other initial conditions and parameters can be selected in `SetupProblem`.
 * `main_time_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in time (expected: 2).
-* `main_space_order` — same as above but refining in space (expected EOC: 4).
-* `main_MC_AF` — a Monte Carlo series of runs investigating the total amplification factor (AF) for randomized initial conditions over a Gaussian background spectrum.
+* `main_space_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in space (expected: 2).
+* `main_MC_AF` — a Monte Carlo series of runs investigating the total amplification factor (TAF) and inhomogeneity amplification factor (IAF) for randomized initial conditions over a Gaussian background spectrum.
 
 To modify initial conditions, edit `SetupProblem` in the `problem_specific/` folder.
 
@@ -26,7 +26,7 @@ Throughout the code, variables are organized in structs:
 Note: hyperlinks in the command window are disabled for cleaner log files. Re-enable with `feature('HotLinks', 1)`.
 
 ## Reproducing paper results
-The `reproduce/` folder contains scripts that reproduce specific figures and tables from the paper. They can be run directly from that folder — each script changes directory to the project root automatically before initializing.
+The `reproduce/` folder contains scripts that reproduce specific figures and tables from the paper [arXiv:2506.06879]. They can be run directly from that folder — each script changes directory to the project root automatically before initializing.
 
 * `Rep_Figures_1to4` — Figures 1–4 (validation against exact solution).
 * `Rep_Figure_6` — Figure 6 (stable Gaussian background, `C=0.9`).
@@ -35,8 +35,6 @@ The `reproduce/` folder contains scripts that reproduce specific figures and tab
 * `Rep_Table_2` — Table 2 (space EOC, advanced initialization).
 * `Rep_Table_3` — Table 3 (time EOC, naive initialization).
 * `Rep_Table_4` — Table 4 (space EOC, naive initialization).
-
-Note: the scripts in their current form are calibrated to reproduce the paper results but may not exactly match the runs described in the paper in all parameter details.
 
 ## Compatibility
 Tested on MATLAB R2023b and R2025b.
