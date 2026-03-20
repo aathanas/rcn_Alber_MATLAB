@@ -2,7 +2,7 @@ function f1 = LaunchFigure(cfg)
 
 
 
-if cfg.slurm_flag
+if ~cfg.interactive
     f1 = figure('Visible','off');
 else
     f1 = figure;

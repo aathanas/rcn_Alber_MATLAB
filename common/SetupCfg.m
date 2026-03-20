@@ -58,11 +58,10 @@ disp(['[SetupCfg] BLAS version: '  blas_info ])
 
 
 
-cfg.slurm_flag = 1; % options are 1, 0. 
-% If 1, it is assumed that the code is running in a non-interactive way 
-% and opens no windows. This is safe for HPC clusters. Any plots are 
-% saved directly in the outputs. If it is 0, plots open in figures, and 
-% are also saved in the outputs.
+cfg.interactive = 0; % options are 0, 1.
+% If 0, no figure windows are opened; plots are saved directly to outputs.
+% This is the default, and is safe for HPC clusters.
+% If 1, plots open in interactive figure windows and are also saved to outputs.
 
 
 cfg.series_flag = 0; % the default job is a single run. This is over-written for a series of runs
