@@ -7,9 +7,9 @@ Clone or download the repository and keep the folder structure intact. Set MATLA
 ## Running the solver
 Call any of the `main_*` scripts from the project root. They run with default parameters and short final times `T` to enable quick benchmarking.
 
-* `main_basic` — a single run, set up with a default problem; other initial conditions and parameters can be selected in `SetupProblem`.
+* `main_basic` — a single run, set up with a default problem; other initial conditions and parameters can be selected in `problem_specific/SetupProblem`.
 * `main_time_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in time (expected: 2).
-* `main_space_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in space (expected: 2).
+* `main_space_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in space (expected: 4).
 * `main_MC_AF` — a Monte Carlo series of runs investigating the total amplification factor (TAF) and inhomogeneity amplification factor (IAF) for randomized initial conditions over a Gaussian background spectrum.
 
 To modify initial conditions, edit `SetupProblem` in the `problem_specific/` folder.
