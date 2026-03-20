@@ -12,6 +12,8 @@ Call any of the `main_*` scripts from the project root. They run with default pa
 * `main_space_order` — a series of runs comparing to an exact solution to find the experimental order of convergence (EOC) in space (expected: 4).
 * `main_MC_AF` — a Monte Carlo series of runs investigating the total amplification factor (TAF) and inhomogeneity amplification factor (IAF) for randomized initial conditions over a Gaussian background spectrum.
 
+By default, figures are not displayed interactively — they are saved directly to the `outputs/` subfolder as PDF and `.fig` files. This makes the code safe to run on HPC clusters without a display. To enable interactive figures, set `cfg.slurm_flag = 0` in `common/SetupCfg`.
+
 To modify initial conditions, edit `SetupProblem` in the `problem_specific/` folder.
 
 Each run creates a timestamped subfolder under `outputs/`. Plots are saved there according to the flags in `cfg`. Comments and diagnostics are printed to the command window and recorded in a log file in the timestamped subfolder.
