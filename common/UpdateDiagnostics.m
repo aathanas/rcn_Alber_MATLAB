@@ -1,67 +1,60 @@
-function CGD = UpdateDiagnostics(cfg,CP,SD,state_old,state_new,CGD)
+function D = UpdateDiagnostics(config, CP, SD, state_old, state_new, D)
+%% Record mid-run diagnostics at the current timestep.
+%
+%  D = UpdateDiagnostics(config, CP, SD, state_old, state_new, D)
+%
+%  Called every config.monitor.frequency timesteps during the main loop.
+%  Appends current values to the growing arrays in D.
 
-
-
-if cfg.keep_track_posden || cfg.keep_track_posden_size
+%% Position density extraction
+if config.monitor.posden || config.monitor.posden_size
     posden = diag(state_new.U);
-    posden=posden(:);
+    posden = posden(:);
 end
 
+%% Time vector
+D.tvec = [D.tvec, state_new.t];
 
-
-CGD.tvec = [CGD.tvec state_new.t];
-
-
-
-if cfg.keep_track_posden % the whole position density can be save, this allows nice summary plots in the end
-    CGD.posden = [CGD.posden posden];
+%% Position density snapshots
+if config.monitor.posden
+    D.posden.snapshots = [D.posden.snapshots, posden];
 end
 
-if cfg.keep_track_posden_size
-    thisL2_norm =  norm(posden) * sqrt(SD.dx);
-    thisLinf_norm =  max(abs(posden));
-    CGD.posdenL2 = [CGD.posdenL2 thisL2_norm];
-    CGD.posdenLinf = [CGD.posdenLinf thisLinf_norm];
-
+if config.monitor.posden_size
+    D.posden.L2   = [D.posden.L2,   norm(posden) * sqrt(SD.dx)];
+    D.posden.Linf = [D.posden.Linf, max(abs(posden))];
 end
 
-if cfg.keep_track_invariants
-    I = Invariants(CP,SD,state_new); % this is a 3 by 1 column vector
-    CGD.I = [CGD.I  I];
+%% Invariants
+if config.monitor.invariants
+    I = Invariants(CP, SD, state_new);
+    D.invariants.history = [D.invariants.history, I];
 end
 
-if cfg.keep_track_amplific_factor
-    [TAF,IAF] = AmplificationFactor(CP,SD,CGD,state_new);
-    CGD.total_amplific_factor =[CGD.total_amplific_factor TAF];
-    CGD.inhomogeneity_amplific_factor = [CGD.inhomogeneity_amplific_factor IAF];
+%% Amplification factors
+if config.monitor.amplific_factor
+    [TAF, IAF] = AmplificationFactor(CP, SD, D, state_new);
+    D.amplification.TAF = [D.amplification.TAF, TAF];
+    D.amplification.IAF = [D.amplification.IAF, IAF];
 end
 
-
-
-
-if cfg.keep_track_constr_error
-
+%% Constraint error
+if config.monitor.constr_error
     Phi1 = Phi_from_u(state_old.U);
     Phi2 = Phi_from_u(state_new.U);
-
-    constrerr_this = max(max(abs( (Phi1+Phi2)/2 - state_new.Phi )));
-
-    CGD.constr_err = [CGD.constr_err constrerr_this]; % the constraint error doesn't really make sense at t=0
+    constrerr = max(max(abs((Phi1 + Phi2)/2 - state_new.Phi)));
+    D.constr_error = [D.constr_error, constrerr];
 end
 
-
-if cfg.compare2exact % L2 and Linfty errors for U and Phi
-    ErrU = state_new.U - CP.ExactSolution(SD.X,SD.Y,state_new.t);
-    ErrPhi = state_new.Phi - (  CP.ExactSolution(SD.X,SD.X,state_new.t_minus_half) - CP.ExactSolution(SD.Y,SD.Y,state_new.t_minus_half) );
-    CGD.L2_err_U = [CGD.L2_err_U norm(ErrU,'fro') * SD.dx];
-    CGD.Linf_err_U = [CGD.Linf_err_U max(max(abs(ErrU)))];
-    CGD.L2_err_Phi = [CGD.L2_err_Phi norm(ErrPhi,'fro') * SD.dx];
-    CGD.Linf_err_Phi = [CGD.Linf_err_Phi max(max(abs(ErrPhi)))];
-
+%% Error vs exact solution
+if config.flags.compare2exact
+    ErrU   = state_new.U - CP.ExactSolution(SD.X, SD.Y, state_new.t);
+    ErrPhi = state_new.Phi - (CP.ExactSolution(SD.X, SD.X, state_new.t_minus_half) ...
+                            - CP.ExactSolution(SD.Y, SD.Y, state_new.t_minus_half));
+    D.error.L2_U    = [D.error.L2_U,    norm(ErrU, 'fro') * SD.dx];
+    D.error.Linf_U  = [D.error.Linf_U,  max(max(abs(ErrU)))];
+    D.error.L2_Phi  = [D.error.L2_Phi,  norm(ErrPhi, 'fro') * SD.dx];
+    D.error.Linf_Phi = [D.error.Linf_Phi, max(max(abs(ErrPhi)))];
 end
-
-
-
-
 
 end

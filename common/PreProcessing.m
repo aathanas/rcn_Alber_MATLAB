@@ -1,105 +1,92 @@
-function CGD = PreProcessing(cfg,CP,SD,state)
+function D = PreProcessing(config, CP, SD, state)
+%% Initialize diagnostics and create initial-time plots.
+%
+%  D = PreProcessing(config, CP, SD, state)
+%
+%  Populates the D struct (from CreateDiagnostics) with t=0 values:
+%  invariants, amplification factors, position density, and errors.
+%  Generates initial plots as requested by config.output.
 
+assertStructType(config, 'config', 'PreProcessing');
+assertStructType(CP, 'continuous_problem', 'PreProcessing');
+assertStructType(SD, 'spatial_discretization', 'PreProcessing');
 
+D = CreateDiagnostics();
 
-
-
-
-%% plotting the intial state in accordance to cfg
-
-if cfg.keep_track_posden || cfg.keep_track_posden_size || cfg.plot_IC_posden
+%% Position density extraction
+if config.monitor.posden || config.monitor.posden_size || config.output.plot_IC_posden
     posden = diag(state.U);
-    posden=posden(:);
+    posden = posden(:);
 end
 
+%% Initial condition plots
+if config.output.plot_IC
+    xy_saveplot_fig(SD.x, SD.y, real(state.U), ...
+        'Real part of u_0(x,y)', '1_IC_Real', config, 'x', 'y');
+    xy_saveplot_fig(SD.x, SD.y, abs(state.U), ...
+        'Modulus of u_0(x,y)', '1_IC_Abs', config, 'x', 'y');
 
-
-if cfg.plot_IC
-
-    % save a plot of the real part of the IC
-    xy_saveplot_fig(SD.x,SD.y,real(state.U),'Real part of u_0(x,y)','1_IC_Real',cfg,'x','y');
-
-    % save a plot of the modulus of the IC
-    xy_saveplot_fig(SD.x,SD.y,abs(state.U),'Modulus of u_0(x,y)','1_IC_Abs',cfg,'x','y');
-
-
-    disp(['L^2 norm of Ic is ' num2str( sqrt( sum(sum(  abs(state.U).^2 )) *SD.dx*SD.dy) ) ])
-    disp(['L^infty norm of Ic is ' num2str(  max(max(  abs(state.U) ))  ) ])
-
-
+    fprintf('[PreProcessing] L^2 norm of IC: %g\n', ...
+        sqrt(sum(sum(abs(state.U).^2)) * SD.dx * SD.dy));
+    fprintf('[PreProcessing] L^inf norm of IC: %g\n', ...
+        max(max(abs(state.U))));
 end
 
-
-if cfg.plot_IC_posden
-
-    % save a plot of the initial "position density"
-    f_of_x_save_fig({SD.x},{posden},{'Initial position density, u_0(x,x)'},'1_IC_posden',cfg,'x')
-
-
+if config.output.plot_IC_posden
+    f_of_x_save_fig({SD.x}, {posden}, ...
+        {'Initial position density, u_0(x,x)'}, '1_IC_posden', config, 'x');
 end
 
-
-%% Initialize the Diagnostics for this job
-
-if cfg.do_invariants || cfg.keep_track_invariants
-    I = Invariants(CP,SD,state); % this is a 3 by 1 column vector with the invariants
+%% Invariants at t=0
+if config.output.do_invariants || config.monitor.invariants
+    I = Invariants(CP, SD, state);
 end
 
-
-if cfg.do_invariants
-    CGD.InitialInvariants = I; 
+if config.output.do_invariants
+    D.invariants.initial = I;
 end
 
-if cfg.keep_track_invariants % this will keep track of invariants on a coarse time grid
-    CGD.I = I;
+if config.monitor.invariants
+    D.invariants.history = I;
 end
 
-if cfg.do_amplific_factor || cfg.keep_track_amplific_factor
-    CGD.rho0 = 1; % needed to perform the computation of the initial amplitude
-    [TAF,IAF] = AmplificationFactor(CP,SD,CGD,state);
-    CGD.rho0 = TAF; % creates correct initial amplitude. NOT an actual AF
+%% Amplification factors at t=0
+if config.output.do_amplific_factor || config.monitor.amplific_factor
+    D.amplification.rho0 = 1;  % temporary, to compute initial amplitude
+    [TAF, ~] = AmplificationFactor(CP, SD, D, state);
+    D.amplification.rho0 = TAF;  % store actual initial amplitude (not an AF)
 
-    CGD.total_amplific_factor=1; % correct assignment of initial  AF
-    CGD.inhomogeneity_amplific_factor=1;
+    D.amplification.TAF = 1;  % initial AF is 1 by definition
+    D.amplification.IAF = 1;
 end
 
+%% Time vector
+D.tvec = 0;
 
-CGD.tvec = 0;
-% tvec eventually will be a coarse time grid (0=t1,t2,...tn = T) on which
-% various diagnostics will be computed. The fields of CGD will have the
-% values of the diagnostics as required, as 1 by n or m by n arrays, where
-% the jth column will corespond to the jth time in tvec
-
-
-if cfg.keep_track_posden % the whole position density can be saved, this allows nice summary plots in the end
-    CGD.posden = posden;
+%% Position density tracking
+if config.monitor.posden
+    D.posden.snapshots = posden;
 end
 
-if cfg.keep_track_posden_size
-    thisL2_norm =  norm(posden) * sqrt(SD.dx);
-    thisLinf_norm =  max(abs(posden));
-    CGD.posdenL2 = thisL2_norm;
-    CGD.posdenLinf = thisLinf_norm;
+if config.monitor.posden_size
+    D.posden.L2   = norm(posden) * sqrt(SD.dx);
+    D.posden.Linf = max(abs(posden));
 end
 
-
-if cfg.keep_track_constr_error
-    CGD.constr_err = 0; % the constraint error doesn't really make sense at t=0, so it gets a placeholder value of 0
+%% Constraint error placeholder
+if config.monitor.constr_error
+    D.constr_error = 0;  % no meaningful value at t=0
 end
 
-
-
-if cfg.compare2exact % L2 and Linfty errors for U and Phi
-    ErrU = state.U - CP.ExactSolution(SD.X,SD.Y,state.t);
-    ErrPhi = state.Phi - (  CP.ExactSolution(SD.X,SD.X,state.t_minus_half) - CP.ExactSolution(SD.Y,SD.Y,state.t_minus_half) );
-    CGD.L2_err_U = norm(ErrU,'fro') * SD.dx;
-    CGD.Linf_err_U= max(max(abs(ErrU)));
-    CGD.L2_err_Phi = norm(ErrPhi,'fro') * SD.dx;
-    CGD.Linf_err_Phi= max(max(abs(ErrPhi)));
-
+%% Error vs exact solution
+if config.flags.compare2exact
+    ErrU   = state.U - CP.ExactSolution(SD.X, SD.Y, state.t);
+    ErrPhi = state.Phi - (CP.ExactSolution(SD.X, SD.X, state.t_minus_half) ...
+                        - CP.ExactSolution(SD.Y, SD.Y, state.t_minus_half));
+    D.error.L2_U    = norm(ErrU, 'fro') * SD.dx;
+    D.error.Linf_U  = max(max(abs(ErrU)));
+    D.error.L2_Phi  = norm(ErrPhi, 'fro') * SD.dx;
+    D.error.Linf_Phi = max(max(abs(ErrPhi)));
 end
-
-
-
 
 end

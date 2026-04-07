@@ -1,47 +1,52 @@
-function state = Initialization(cfg,CP,SD,dt,T)
-% Create the initial state of the solver
+function state = Initialization(config, CP, SD, dt, T)
+%% Create the initial solver state for the (nonlinear) Alber equation.
+%
+%  state = Initialization(config, CP, SD, dt, T)
+%
+%  Computes u(x,y,0) from CP.IC and initializes Phi^{-1/2} according
+%  to config.problem.init_type:
+%    'naive'    — Phi from u at t=0 (no backward step)
+%    'advanced' — half-step backward to compute Phi at t = -dt/2
+%    'exact'    — evaluate CP.ExactSolution at t = -dt/2
 
+assertStructType(config, 'config', 'Initialization');
+assertStructType(CP, 'continuous_problem', 'Initialization');
+assertStructType(SD, 'spatial_discretization', 'Initialization');
 
-%% % naive initialization
-uOld = CP.IC(SD.X,SD.Y);
+%% Naive initialization (always computed as baseline)
+uOld   = CP.IC(SD.X, SD.Y);
 PhiOld = Phi_from_u(uOld);
 
+% Temporary state needed for the advanced backward step
+state.U   = uOld + SD.GammaMatrix;
+state.Phi = PhiOld;
+state.t   = 0;
 
-state.U = uOld + SD.GammaMatrix ;
-state.Phi=PhiOld;
-state.t=0;
-
-
-
-%% advanced initializtion
-
-if strcmp(cfg.init_type,'advanced')
-    disp('[PreProcessing] Performing advanced initialization step... ')
+%% Advanced or exact initialization
+if strcmp(config.problem.init_type, 'advanced')
+    fprintf('[Initialization] Performing advanced initialization step...\n');
     tic;
-    staux = timestep(CP,-dt/2,state,SD);
+    staux     = timestep(CP, -dt/2, state, SD);
     step_time = toc;
 
-    disp(['[PreProcessing] Roughly ' num2str(step_time) 's per timestep.'])
-    disp(['[PreProcessing] Expected roughly ' num2str(ceil(T*step_time / (dt * 60))) ' minutes to finish this run.'])
-    disp(datestr(now, 'dd-mmm-yyyy_HH-MM-SS'))
+    fprintf('[Initialization] ~%.2f s per timestep.\n', step_time);
+    fprintf('[Initialization] Estimated ~%d minutes for this run.\n', ...
+        ceil(T * step_time / (dt * 60)));
 
     PhiOld = Phi_from_u(staux.U);
 
-elseif strcmp(cfg.init_type,'exact')
+elseif strcmp(config.problem.init_type, 'exact')
+    fprintf('[Initialization] Performing exact initialization step...\n');
 
-    disp('[PreProcessing] Performing exact initialization step... ')
-
-
-    Uaux = CP.ExactSolution(SD.X,SD.Y,-dt/2);
-
-    PhiOld = Phi_from_u( Uaux );
-
-
+    Uaux   = CP.ExactSolution(SD.X, SD.Y, -dt/2);
+    PhiOld = Phi_from_u(Uaux);
 end
 
-state.U = uOld;
-state.Phi = PhiOld;
-state.t=0;
+%% Assemble final initial state
+state.type         = 'solver_state';
+state.U            = uOld;
+state.Phi          = PhiOld;
+state.t            = 0;
 state.t_minus_half = -dt/2;
 
 end

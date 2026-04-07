@@ -1,39 +1,44 @@
-function state = Initialization_lin(cfg,CP,SD,dt,T)
-% Create the initial state of the solver
+function state = Initialization_lin(config, CP, SD, dt, T)
+%% Create the initial solver state for the linearized Alber equation.
+%
+%  state = Initialization_lin(config, CP, SD, dt, T)
+%
+%  Same as Initialization, but uses timestep_lin for the advanced
+%  backward step.  The 'exact' init_type is not supported here
+%  (the linearized equation has no known exact solution).
 
+assertStructType(config, 'config', 'Initialization_lin');
+assertStructType(CP, 'continuous_problem', 'Initialization_lin');
+assertStructType(SD, 'spatial_discretization', 'Initialization_lin');
 
-%% % naive initialization
-uOld = CP.IC(SD.X,SD.Y);
+%% Naive initialization (always computed as baseline)
+uOld   = CP.IC(SD.X, SD.Y);
 PhiOld = Phi_from_u(uOld);
 
+% Temporary state needed for the advanced backward step
+state.U   = uOld + SD.GammaMatrix;
+state.Phi = PhiOld;
+state.t   = 0;
 
-state.U = uOld + SD.GammaMatrix ;
-state.Phi=PhiOld;
-state.t=0;
-
-
-
-%% advanced initializtion
-
-if strcmp(cfg.init_type,'advanced')
-    disp('[PreProcessing] Performing advanced initialization step... ')
+%% Advanced initialization
+if strcmp(config.problem.init_type, 'advanced')
+    fprintf('[Initialization_lin] Performing advanced initialization step...\n');
     tic;
-    staux = timestep_lin(CP,-dt/2,state,SD);
+    staux     = timestep_lin(CP, -dt/2, state, SD);
     step_time = toc;
 
-    disp(['[PreProcessing] Roughly ' num2str(step_time) 's per timestep.'])
-    disp(['[PreProcessing] Expected roughly ' num2str(ceil(T*step_time / (dt * 60))) ' minutes to finish this run.'])
-    disp(datestr(now, 'dd-mmm-yyyy_HH-MM-SS'))
+    fprintf('[Initialization_lin] ~%.2f s per timestep.\n', step_time);
+    fprintf('[Initialization_lin] Estimated ~%d minutes for this run.\n', ...
+        ceil(T * step_time / (dt * 60)));
 
     PhiOld = Phi_from_u(staux.U);
-
-
-
 end
 
-state.U = uOld;
-state.Phi = PhiOld;
-state.t=0;
+%% Assemble final initial state
+state.type         = 'solver_state';
+state.U            = uOld;
+state.Phi          = PhiOld;
+state.t            = 0;
 state.t_minus_half = -dt/2;
 
 end
