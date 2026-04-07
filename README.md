@@ -49,10 +49,12 @@ The `reproduce/` folder contains scripts that reproduce specific figures and tab
 * `Rep_Figures_1to4` — Figures 1–4 (validation against exact solution).
 * `Rep_Figure_6` — Figure 6 (stable Gaussian background, `C=0.9`).
 * `Rep_Figure_7` — Figure 7 (strongly unstable Gaussian background, `C=1.9`).
+* `Rep_Figure_8` — Figure 8 (nonlinear vs linearized solver, `C=1.9`).
 * `Rep_Table_1` — Table 1 (time EOC, advanced initialization).
 * `Rep_Table_2` — Table 2 (space EOC, advanced initialization).
 * `Rep_Table_3` — Table 3 (time EOC, naive initialization).
 * `Rep_Table_4` — Table 4 (space EOC, naive initialization).
+* `RepAll` — runs all reproduction scripts sequentially.
 
 ## Compatibility
 Tested on MATLAB R2023b and R2025b.
